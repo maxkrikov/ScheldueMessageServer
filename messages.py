@@ -16,3 +16,5 @@ async def send_message(id: str):
 
     await bot.send_message(chatId, text)
     await bot.session.close()
+    PostgresConnector().delete_data_by_id(int(id))
+
