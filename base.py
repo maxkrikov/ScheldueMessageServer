@@ -30,3 +30,15 @@ class PostgresConnector:
             return None
         finally:
             self.close_connection()
+
+    def delete_data_by_id(self, id):
+        try:
+            query = sql.SQL(f"DELETE FROM {table_name} WHERE id = %s;").format(sql.Identifier(self.table_name))
+            self.cursor.execute(query, (id,))
+            self.connection.commit()
+            print(f"Row with id={id} deleted successfully.")
+        except Exception as e:
+            self.connection.rollback()
+            print(f"Error: {e}")
+        finally:
+            self.close_connection()
