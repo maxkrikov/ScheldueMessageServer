@@ -1,0 +1,26 @@
+# Используем базовый образ Ubuntu
+FROM ubuntu
+
+# Обновляем список пакетов и устанавливаем пакет nano
+RUN apt-get update && \
+    apt-get install -y nano
+
+# Установка Python3 и pip
+RUN apt-get install -y python3 python3-pip
+RUN apt-get install -y cron
+RUN apt-get install -y curl
+RUN apt-get install -y libpq-dev
+
+
+# Опционально, устанавливаем рабочую директорию внутри контейнера
+WORKDIR /app
+
+# Опционально, копируем файлы из хост-системы в контейнер
+COPY . /app
+
+RUN pip install -r requirements.txt
+
+EXPOSE 8080
+
+# Опционально, указываем команду по умолчанию, которая будет выполняться при запуске контейнера
+CMD ["python3", "main.py"]
