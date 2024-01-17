@@ -1,9 +1,14 @@
 # Используем базовый образ Ubuntu
 FROM ubuntu
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 # Обновляем список пакетов и устанавливаем пакет nano
 RUN apt-get update && \
-    apt-get install -y nano
+    apt-get install -y nano && \
+    apt-get install -y tzdata && \
+    ln -fs /usr/share/zoneinfo/Europe/Moscow /etc/localtime && \
+    dpkg-reconfigure --frontend noninteractive tzdata
 
 # Установка Python3 и pip
 RUN apt-get install -y python3 python3-pip
@@ -19,6 +24,7 @@ WORKDIR /app
 COPY . /app
 
 RUN pip install -r requirements.txt
+RUN python3 set_commands.py
 
 EXPOSE 8080
 
