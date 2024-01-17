@@ -14,7 +14,10 @@ async def send_message(id: str):
     chatId = all_element[1]
     text = all_element[2]
 
-    await bot.send_message(chatId, text)
+    if all_element[4]:
+        await bot.send_photo(chatId, photo=all_element[4], caption=text)
+    else:
+        await bot.send_message(chatId, text)
     await bot.session.close()
-    PostgresConnector().delete_data_by_id(int(id))
 
+    PostgresConnector().delete_data_by_id(int(id))
