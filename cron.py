@@ -9,7 +9,7 @@ async def cros(id: str) -> None:
     all_element = PostgresConnector().get_data_by_id(int(id))
     if not all_element:
         return None
-    date = all_element[3]
+    date = all_element[5]
 
     with CronTab(user='root') as cron:
         job = cron.new(command=f'curl http://localhost:8000/send_message?id={id}')

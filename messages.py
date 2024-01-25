@@ -14,18 +14,18 @@ async def send_message(id: str):
     if not all_element:
         return None
     chatId = all_element[1]
-    text = all_element[2]
+    text = all_element[4]
     entity = []
 
-    if all_element[5]:
-        entitys = json.loads(all_element[5])
+    if all_element[2]:
+        entitys = json.loads(all_element[2])
 
         for en in entitys:
             entity.append(types.MessageEntity(type=en['type'], offset=int(en['offset']),
                                               length=int(en['length']), url=en['url'],
                                               text=en['text']))
-    if all_element[4]:
-        await bot.send_photo(chatId, photo=all_element[4], caption=text, caption_entities=entity)
+    if all_element[3]:
+        await bot.send_photo(chatId, photo=all_element[3], caption=text, caption_entities=entity)
     else:
         await bot.send_message(chatId, text, entities=entity)
     await bot.session.close()
