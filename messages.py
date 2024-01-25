@@ -1,10 +1,12 @@
 import asyncio
+import json
 
 from aiogram import Bot
 from config import token
 from base import PostgresConnector
+from aiogram import types
 
-bot = Bot(token, parse_mode="HTML")
+bot = Bot(token)
 
 
 async def send_message(id: str):
@@ -13,9 +15,17 @@ async def send_message(id: str):
         return None
     chatId = all_element[1]
     text = all_element[2]
+    entity = []
 
+    if all_element[5]:
+        entitys = json.loads(all_element[5])
+
+        for en in entitys:
+            entity.append(types.MessageEntity(type=en['type'], offset=int(en['offset']),
+                                              length=int(en['length']), url=en['url'],
+                                              text=en['text']))
     if all_element[4]:
-        await bot.send_photo(chatId, photo=all_element[4], caption=text)
+        await bot.send_photo(chatId, photo=all_element[4], caption=text, caption_entities=entity)
     else:
-        await bot.send_message(chatId, text)
+        await bot.send_message(chatId, text, entities=entity)
     await bot.session.close()

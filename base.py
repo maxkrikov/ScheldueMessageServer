@@ -30,3 +30,16 @@ class PostgresConnector:
             return None
         finally:
             self.close_connection()
+
+    def get_entity(self, id):
+        try:
+            query = sql.SQL(f"SELECT entity FROM {table_name} WHERE id = %s;").format(self.table_name)
+            self.cursor.execute(query, (id,))
+            data = self.cursor.fetchone()
+            return data
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+        finally:
+            self.close_connection()
+
